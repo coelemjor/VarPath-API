@@ -25,6 +25,9 @@ async def get_vep_annotation_via_api(vep_api_input_id: str) -> Optional[Dict[str
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(url, headers={"Content-Type": "application/json"}, params=params, timeout=30)
+            
+            log.debug(f"VEP API Raw Response Text: {response.text}")
+
             response.raise_for_status()
             data = response.json()
 
@@ -57,6 +60,11 @@ async def get_reactome_pathways_via_api(ensembl_gene_id: str) -> List[str]:
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(url, headers=headers, timeout=15)
+
+            # --- DEBUG LOGGING ---
+            log.debug(f"Reactome API Raw Response Text: {response.text}")
+            # --- END DEBUG LOGGING ---
+
             response.raise_for_status()
             data = response.json()
         

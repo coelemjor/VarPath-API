@@ -8,7 +8,7 @@ from .core.config import settings
 from .variant_parser import normalize_variant_for_vep
 from .external_apis import get_vep_annotation_via_api, get_reactome_pathways_via_api
 
-logging.basicConfig(level=settings.LOGGING_LEVEL.upper(), format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(level="DEBUG", format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 log = logging.getLogger("app.main")
 
 app = FastAPI(
