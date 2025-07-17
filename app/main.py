@@ -36,7 +36,6 @@ class VariantContextResponse(BaseModel):
 def _parse_alphamissense_from_vep(vep_consequence: Dict[str, Any]) -> Optional[Tuple[float, str]]:
     """
     Helper to parse AlphaMissense data from the VEP consequence 'custom_annotations'.
-    The VEP AlphaMissense plugin adds its data here.
     """
     custom_annotations = vep_consequence.get("custom_annotations", [])
     for annotation in custom_annotations:
