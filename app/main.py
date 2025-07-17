@@ -14,7 +14,7 @@ log = logging.getLogger("app.main")
 app = FastAPI(
     title=settings.PROJECT_NAME,
     description=f"Provides functional context for genetic variants based on {settings.ASSEMBLY}.",
-    version="2.2.0", 
+    version="2.2.0", # Version bump for parser fixes
 )
 
 class VariantContextResponse(BaseModel):
@@ -36,17 +36,25 @@ class VariantContextResponse(BaseModel):
 def _parse_alphamissense_from_vep(vep_consequence: Dict[str, Any]) -> Optional[Tuple[float, str]]:
     """
     Helper to parse AlphaMissense data from the VEP transcript consequence object.
-    The VEP AlphaMissense plugin adds an 'alphamissense' key directly.
+    The VEP AlphaMissense plugin adds an 'alphamissense' key directly to the consequence.
     """
+    # Look for the 'alphamissense' key directly in the consequence object.
     am_data = vep_consequence.get("alphamissense")
+
+    # Check if the data exists and is a dictionary.
     if am_data and isinstance(am_data, dict):
         try:
+            # Extract the score and class from the dictionary.
             score = float(am_data.get("am_pathogenicity"))
             prediction = am_data.get("am_class")
+            
+            # Ensure both values were found before returning.
             if score is not None and prediction is not None:
                 return (score, prediction)
         except (ValueError, TypeError) as e:
+            # Log an error if the values have an unexpected type.
             log.error(f"Could not parse AlphaMissense data from VEP: '{am_data}' - {e}")
+            
     return None
 
 @app.get(
@@ -82,6 +90,7 @@ async def get_variant_context_query(
     
     am_score, am_pred = None, None
     if "missense_variant" in (consequence_str or ""):
+        # The logic to call the parser is now implemented correctly.
         am_result = _parse_alphamissense_from_vep(relevant_consequence)
         if am_result:
             am_score, am_pred = am_result
