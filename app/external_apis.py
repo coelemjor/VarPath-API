@@ -1,3 +1,5 @@
+# app/external_apis.py
+
 import httpx
 import logging
 from typing import Optional, List, Dict, Any
@@ -25,9 +27,6 @@ async def get_vep_annotation_via_api(vep_api_input_id: str) -> Optional[Dict[str
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(url, headers={"Content-Type": "application/json"}, params=params, timeout=30)
-            
-            log.debug(f"VEP API Raw Response Text: {response.text}")
-
             response.raise_for_status()
             data = response.json()
 
@@ -52,7 +51,8 @@ async def get_reactome_pathways_via_api(ensembl_gene_id: str) -> List[str]:
     if not ensembl_gene_id:
         return []
     
-    endpoint = f"/data/pathways/low/entity/{ensembl_gene_id}/allForms"
+    # Use the more robust mapping endpoint provided by Reactome.
+    endpoint = f"/data/mapping/ENSEMBL/{ensembl_gene_id}/pathways"
     url = f"{settings.REACTOME_API_SERVER}{endpoint}"
     headers = {'accept': 'application/json'}
     log.info(f"Querying Reactome API for gene: {ensembl_gene_id}")
@@ -60,14 +60,10 @@ async def get_reactome_pathways_via_api(ensembl_gene_id: str) -> List[str]:
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(url, headers=headers, timeout=15)
-
-            # --- DEBUG LOGGING ---
-            log.debug(f"Reactome API Raw Response Text: {response.text}")
-            # --- END DEBUG LOGGING ---
-
             response.raise_for_status()
             data = response.json()
         
+        # The mapping endpoint returns a list of pathway objects directly.
         pathway_ids = [pathway['stId'] for pathway in data if pathway and 'stId' in pathway]
         log.info(f"Found {len(pathway_ids)} pathways for {ensembl_gene_id}.")
         return sorted(pathway_ids)

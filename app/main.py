@@ -8,13 +8,13 @@ from .core.config import settings
 from .variant_parser import normalize_variant_for_vep
 from .external_apis import get_vep_annotation_via_api, get_reactome_pathways_via_api
 
-logging.basicConfig(level="DEBUG", format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=settings.LOGGING_LEVEL.upper(), format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 log = logging.getLogger("app.main")
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
     description=f"Provides functional context for genetic variants based on {settings.ASSEMBLY}.",
-    version="2.1.0",
+    version="2.2.0", 
 )
 
 class VariantContextResponse(BaseModel):
@@ -35,18 +35,18 @@ class VariantContextResponse(BaseModel):
 
 def _parse_alphamissense_from_vep(vep_consequence: Dict[str, Any]) -> Optional[Tuple[float, str]]:
     """
-    Helper to parse AlphaMissense data from the VEP consequence 'custom_annotations'.
+    Helper to parse AlphaMissense data from the VEP transcript consequence object.
+    The VEP AlphaMissense plugin adds an 'alphamissense' key directly.
     """
-    custom_annotations = vep_consequence.get("custom_annotations", [])
-    for annotation in custom_annotations:
-        if annotation.get("source") == "AlphaMissense":
-            try:
-                am_string = annotation.get("value")
-                if am_string and '&' in am_string:
-                    prediction, score_str = am_string.split('&', 1)
-                    return (float(score_str), prediction)
-            except (ValueError, IndexError) as e:
-                log.error(f"Could not parse AlphaMissense value from VEP: '{annotation.get('value')}' - {e}")
+    am_data = vep_consequence.get("alphamissense")
+    if am_data and isinstance(am_data, dict):
+        try:
+            score = float(am_data.get("am_pathogenicity"))
+            prediction = am_data.get("am_class")
+            if score is not None and prediction is not None:
+                return (score, prediction)
+        except (ValueError, TypeError) as e:
+            log.error(f"Could not parse AlphaMissense data from VEP: '{am_data}' - {e}")
     return None
 
 @app.get(
