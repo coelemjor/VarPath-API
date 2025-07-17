@@ -1,6 +1,6 @@
 # Variant Context API
 
-A high-performance, asynchronous API built with FastAPI to provide functional context and pathogenicity predictions for human genetic variants. This service orchestrates real-time calls to external bioinformatics APIs (Ensembl VEP, Reactome) to deliver a comprehensive, on-the-fly annotation for a given variant.
+A high-performance, asynchronous API to provide functional context for human genetic variants. This service orchestrates real-time calls to external bioinformatics APIs to deliver on-the-fly annotations.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python Version](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
@@ -8,24 +8,30 @@ A high-performance, asynchronous API built with FastAPI to provide functional co
 
 ---
 
-## Key Features
+## Core Functionality
 
-* **Asynchronous Processing:** Built with `async/await` using FastAPI and `httpx` for high-throughput, non-blocking performance when calling external APIs.
-* **Comprehensive VEP Annotation:** Leverages the Ensembl VEP REST API for real-time annotation of variant consequences, affected genes, and transcripts (GRCh38).
-* **Integrated Pathogenicity Prediction:** Configured to use the VEP `AlphaMissense` plugin, providing state-of-the-art missense variant pathogenicity scores directly.
-* **Live Pathway Analysis:** Identifies associated biological pathways by querying the Reactome API in real-time.
-* **Streamlined & Deployable:** A lightweight, stateless application with minimal dependencies, designed for easy deployment on modern PaaS platforms (e.g., Render, Fly.io, Heroku).
-* **Tested:** Includes a comprehensive suite of unit and integration tests using `pytest`.
+This API provides key annotations for a given variant identifier (GRCh38) by integrating the following services:
 
-## Technology Stack
+* **Ensembl VEP:** For primary annotation of variant consequences, affected genes, and transcripts.
+* **AlphaMissense:** Pathogenicity predictions for missense variants are retrieved via the VEP plugin.
+* **Reactome:** Associated biological pathways are identified via the Reactome API.
 
-* **Backend Framework:** FastAPI
-* **HTTP Client:** HTTPX (for async requests to external APIs)
-* **Configuration:** Pydantic Settings
+## API Usage
 
-## Setup and Local Execution
+The API is accessed via a single `GET` endpoint.
 
-### Prerequisites
+**Live Endpoint:** `https://your-api-domain.com/variant/context` (Placeholder)
+**Local Endpoint:** `http://127.0.0.1:8000/variant/context`
 
-* Python 3.11+
-* Git
+### Query Parameter
+
+* `variant_identifier` (string, **required**): The variant to annotate. Accepts rsID, coordinate-based, and HGVS formats.
+
+### Example Requests
+
+Here are several examples using `curl`. Simply replace the placeholder domain with your live API URL.
+
+**1. By Genomic Coordinates (`chr:pos:ref:alt`)**
+
+```bash
+curl -X GET "[https://your-api-domain.com/variant/context?variant_identifier=7:140753336:A:T](https://your-api-domain.com/variant/context?variant_identifier=7:140753336:A:T)"

@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    container_name: variant_api
+    restart: always
+
+    env_file:
+      - ./.env
+ 
+    ports:
+      - "8000:8000"
