@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   api:
+
     build: .
     container_name: variant_api
     restart: always
@@ -9,28 +10,3 @@ services:
       - ./.env
     ports:
       - "8000:8000"
-    depends_on:
-      - db
-    networks:
-      - variant_net
-
-  db:
-    image: postgres:16-alpine
-    container_name: variant_db
-    restart: always
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    env_file:
-      - ./.env
-    ports:
-      - "5432:5432"
-    networks:
-      - variant_net
-
-networks:
-  variant_net:
-    driver: bridge
-
-volumes:
-  postgres_data:
-    driver: local
