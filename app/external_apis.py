@@ -1,5 +1,3 @@
-# app/external_apis.py
-
 import httpx
 import logging
 from typing import Optional, List, Dict, Any
@@ -51,7 +49,6 @@ async def get_reactome_pathways_via_api(ensembl_gene_id: str) -> List[str]:
     if not ensembl_gene_id:
         return []
     
-    # Use the more robust mapping endpoint provided by Reactome.
     endpoint = f"/data/mapping/ENSEMBL/{ensembl_gene_id}/pathways"
     url = f"{settings.REACTOME_API_SERVER}{endpoint}"
     headers = {'accept': 'application/json'}
@@ -63,7 +60,6 @@ async def get_reactome_pathways_via_api(ensembl_gene_id: str) -> List[str]:
             response.raise_for_status()
             data = response.json()
         
-        # The mapping endpoint returns a list of pathway objects directly.
         pathway_ids = [pathway['stId'] for pathway in data if pathway and 'stId' in pathway]
         log.info(f"Found {len(pathway_ids)} pathways for {ensembl_gene_id}.")
         return sorted(pathway_ids)
