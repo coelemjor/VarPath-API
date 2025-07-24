@@ -36,11 +36,11 @@ Here are several examples using `curl`. Simply replace the placeholder domain wi
 **Search By Genomic Coordinates (`chr:pos:ref:alt`)**
 
 ```bash
-curl "https://api.varpath.cc/variant/context?variant_identifier=7:140753336:A:T"
+`curl "https://api.varpath.cc/variant/context?variant_identifier=7:140753336:A:T"`
 ```
 
 **Example Response**
 
 ```bash
-{"input_variant":"7:140753336:A:T","resolved_variant":"7:g.140753336A>T","requested_assembly":"GRCh38","gene_symbol":"BRAF","ensembl_gene_id":"ENSG00000157764","transcript_id":"ENST00000288602","consequence":"missense_variant","hgvsc":"c.1919T>A","hgvsp":"p.Val640Glu","impact":"MODERATE","alphamissense_score":0.9927,"alphamissense_prediction":"likely_pathogenic","pathways":["R-HSA-1295596","R-HSA-170968","R-HSA-170984","R-HSA-187706","R-HSA-5673000","R-HSA-5674135","R-HSA-5674499","R-HSA-5675221","R-HSA-6802946","R-HSA-6802948","R-HSA-6802952","R-HSA-6802955","R-HSA-9649948","R-HSA-9656223","R-HSA-9726840","R-HSA-9726842"]}
+`{"input_variant":"7:140753336:A:T","resolved_variant":"7:g.140753336A>T","requested_assembly":"GRCh38","gene_symbol":"BRAF","ensembl_gene_id":"ENSG00000157764","transcript_id":"ENST00000288602","consequence":"missense_variant","hgvsc":"c.1919T>A","hgvsp":"p.Val640Glu","impact":"MODERATE","alphamissense_score":0.9927,"alphamissense_prediction":"likely_pathogenic","pathways":["R-HSA-1295596","R-HSA-170968","R-HSA-170984","R-HSA-187706","R-HSA-5673000","R-HSA-5674135","R-HSA-5674499","R-HSA-5675221","R-HSA-6802946","R-HSA-6802948","R-HSA-6802952","R-HSA-6802955","R-HSA-9649948","R-HSA-9656223","R-HSA-9726840","R-HSA-9726842"]}`
 ```
