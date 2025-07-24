@@ -34,7 +34,7 @@ The API is accessed via a single `GET` endpoint.
 **Search By Genomic Coordinates (`chr:pos:ref:alt`)**
 
 ```bash
-`curl "https://api.varpath.cc/variant/context?variant_identifier=7:140753336:A:T"`
+curl "https://api.varpath.cc/variant/context?variant_identifier=7:140753336:A:T"
 ```
 
 **Example Response**
